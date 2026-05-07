@@ -8,8 +8,9 @@ import random
 from collections import deque
 import matplotlib.pyplot as plt
 
-# 加入上一層目錄以利匯入 Gridworld
-sys.path.append('..')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 from Gridworld import Gridworld
 
 action_set = {
@@ -90,7 +91,7 @@ def train_agent(model_type='basic', epochs=1000, mem_size=1000, batch_size=200, 
     
     steps = 0
     for i in range(epochs):
-        game = Gridworld(size=4, mode='random')
+        game = Gridworld(size=4, mode='player')
         state1_ = game.board.render_np().reshape(1, 64) + np.random.rand(1, 64) / 100.0
         state1 = torch.from_numpy(state1_).float()
         status = 1
@@ -172,7 +173,7 @@ def test_agent(model, test_games=1000):
     wins = 0
     max_moves = 15
     for _ in range(test_games):
-        test_game = Gridworld(size=4, mode='random')
+        test_game = Gridworld(size=4, mode='player')
         state_ = test_game.board.render_np().reshape(1, 64) + np.random.rand(1, 64) / 100.0
         state = torch.from_numpy(state_).float()
         status = 1
